@@ -18,11 +18,12 @@ RUN pip install --no-cache-dir torch==2.1.2+cpu torchvision==0.16.2+cpu \
 # Install remaining requirements
 RUN pip install --no-cache-dir fastapi uvicorn Pillow numpy python-multipart
 
-# Copy only what is needed for the API
+# Copy only what is needed for the API and frontend
 COPY API ./API
 COPY MODEL ./MODEL
 COPY DATA_PREPROCESSING ./DATA_PREPROCESSING
 COPY TRAINING ./TRAINING
+COPY WEB_APP ./WEB_APP
 COPY requirements.txt .
 
 ENV PORT=10000

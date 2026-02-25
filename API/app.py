@@ -1,5 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import torch
 from PIL import Image
 import io
@@ -39,9 +41,22 @@ def load_model():
             print(f"Warning: Model file {MODEL_PATH} not found. Running with untrained weights.")
     return model
 
+# Mount static files
+# Ensure the path is relative to the root of the project
+frontend_path = os.path.join(os.path.dirname(__file__), '..', 'WEB_APP')
+app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+
 @app.get("/")
 async def root():
-    return {"message": "PrintGuard AI Quality Detection API is running"}
+    return FileResponse(os.path.join(frontend_path, 'index.html'))
+
+@app.get("/main.js")
+async def get_js():
+    return FileResponse(os.path.join(frontend_path, 'main.js'))
+
+@app.get("/style.css")
+async def get_css():
+    return FileResponse(os.path.join(frontend_path, 'style.css'))
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
