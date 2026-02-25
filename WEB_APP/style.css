@@ -34,6 +34,20 @@ html {
     scroll-behavior: smooth;
 }
 
+.top-bar {
+    background: linear-gradient(90deg, var(--green-dark), var(--green-mid));
+    text-align: center;
+    padding: 7px 1rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.3px;
+}
+
+.top-bar strong {
+    color: #fff;
+    font-weight: 700;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg);
