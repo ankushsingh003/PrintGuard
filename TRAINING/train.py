@@ -11,12 +11,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from DATA_LOADER.data_loader import get_data_loaders
 from MODEL.model import get_model
 
-def train_model(data_dir, num_epochs=10, batch_size=32, lr=0.001, save_path='best_model.pth'):
+def train_model(data_dir, num_epochs=10, batch_size=32, lr=0.001, save_path='best_model.pth', subset_fraction=1.0):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
     # Load data
-    train_loader, val_loader, classes = get_data_loaders(data_dir, batch_size=batch_size)
+    train_loader, val_loader, classes = get_data_loaders(data_dir, batch_size=batch_size, subset_fraction=subset_fraction)
     num_classes = len(classes)
 
     # Initialize model, loss, and optimizer
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     if os.path.exists(DATA_DIR):
         # We'll do a quick run for demonstration if needed, 
         # but the user can run it manually.
-        print("Ready for training. Script structured with full pipeline.")
-        # train_model(DATA_DIR, num_epochs=2) # Uncomment to run
+        print("Starting Optimized Print Quality Model Training (Speed Focus)...")
+        train_model(DATA_DIR, num_epochs=2, subset_fraction=0.1)
     else:
         print(f"Error: {DATA_DIR} not found.")

@@ -13,8 +13,7 @@ from DATA_PREPROCESSING.preprocessing import get_val_transforms
 def predict_single_image(image_path, model_path='best_model.pth', classes=None):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    if classes is None:
-        classes = ['ADVE', 'Email', 'Form', 'Letter', 'Memo', 'News', 'Note', 'Report', 'Resume', 'Scientific']
+    classes = ['Excellent', 'Good', 'Fair', 'Poor']
 
     # Load model
     model = get_model(num_classes=len(classes)).to(device)

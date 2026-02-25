@@ -25,7 +25,7 @@ app.add_middleware(
 
 # Global variables for model and classes
 MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'TRAINING', 'best_model.pth')
-CLASSES = ['ADVE', 'Email', 'Form', 'Letter', 'Memo', 'News', 'Note', 'Report', 'Resume', 'Scientific']
+CLASSES = ['Excellent', 'Good', 'Fair', 'Poor']
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load model lazily

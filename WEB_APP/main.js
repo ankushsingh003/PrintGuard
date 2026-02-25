@@ -3,122 +3,135 @@ const API_URL = 'http://localhost:8000';
 // DOM Elements
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
-const resultContainer = document.getElementById('result-container');
-const uploadCard = document.querySelector('.upload-card');
-const loader = document.getElementById('loader');
-const resetBtn = document.getElementById('reset-btn');
-
-const topPrediction = document.getElementById('top-prediction');
-const topConfidence = document.getElementById('top-confidence');
-const previewImage = document.getElementById('preview-image');
+const uploadPanel = document.getElementById('upload-panel');
+const resultPanel = document.getElementById('result-panel');
+const verdictText = document.getElementById('verdict-text');
+const verdictBadge = document.getElementById('verdict-badge');
+const confidenceVal = document.getElementById('confidence-val');
+const confidenceBar = document.getElementById('confidence-bar');
 const scoresList = document.getElementById('scores-list');
+const docPreview = document.getElementById('doc-preview');
+const resetBtn = document.getElementById('reset-btn');
+const loader = document.getElementById('loader');
+const reportTimestamp = document.getElementById('report-timestamp');
 
-// Event Listeners
+// Quality colors for the breakdown bars
+const QUALITY_COLORS = {
+    'Excellent': '#3fb950',
+    'Good': '#58a6ff',
+    'Fair': '#f0883e',
+    'Poor': '#f85149'
+};
+
+// --- Event Listeners ---
+
 dropZone.addEventListener('click', () => fileInput.click());
 
 dropZone.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  dropZone.classList.add('drag-over');
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
 });
 
-dropZone.addEventListener('dragleave', () => {
-  dropZone.classList.remove('drag-over');
-});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
 
 dropZone.addEventListener('drop', (e) => {
-  e.preventDefault();
-  dropZone.classList.remove('drag-over');
-  const files = e.dataTransfer.files;
-  if (files.length) handleFile(files[0]);
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) processFile(file);
 });
 
-fileInput.addEventListener('change', (e) => {
-  if (e.target.files.length) handleFile(e.target.files[0]);
+fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) processFile(fileInput.files[0]);
 });
 
-resetBtn.addEventListener('click', resetUI);
+resetBtn.addEventListener('click', () => {
+    resultPanel.classList.add('hidden');
+    uploadPanel.classList.remove('hidden');
+    fileInput.value = '';
+    scoresList.innerHTML = '';
+});
 
-async function handleFile(file) {
-  if (!file.type.startsWith('image/')) {
-    alert('Please upload an image file.');
-    return;
-  }
+// --- Core Logic ---
 
-  // Show preview
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    previewImage.style.backgroundImage = `url(${e.target.result})`;
-  };
-  reader.readAsDataURL(file);
+async function processFile(file) {
+    // Show loader
+    loader.classList.remove('hidden');
 
-  // Send to API
-  await predict(file);
-}
+    // Show preview immediately
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        docPreview.innerHTML = `<img src="${e.target.result}" alt="Document preview" />`;
+    };
+    reader.readAsDataURL(file);
 
-async function predict(file) {
-  loader.classList.remove('hidden');
-  
-  const formData = new FormData();
-  formData.append('file', file);
+    // Call API
+    const formData = new FormData();
+    formData.append('file', file);
 
-  try {
-    const response = await fetch(`${API_URL}/predict`, {
-      method: 'POST',
-      body: formData
-    });
+    try {
+        const response = await fetch(`${API_URL}/predict`, {
+            method: 'POST',
+            body: formData,
+        });
 
-    if (!response.ok) throw new Error('Prediction failed');
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.detail || 'Prediction failed');
+        }
 
-    const data = await response.json();
-    updateUI(data);
-  } catch (error) {
-    console.error(error);
-    alert('Failed to connect to the classification API. Make sure the backend is running.');
-  } finally {
-    loader.classList.add('hidden');
-  }
+        const data = await response.json();
+        updateUI(data);
+
+        // Switch panels
+        uploadPanel.classList.add('hidden');
+        resultPanel.classList.remove('hidden');
+    } catch (error) {
+        console.error('Error:', error);
+        alert(`Analysis failed: ${error.message}`);
+    } finally {
+        loader.classList.add('hidden');
+    }
 }
 
 function updateUI(data) {
-  // Update main prediction
-  topPrediction.textContent = data.prediction;
-  topConfidence.textContent = `${(data.confidence * 100).toFixed(1)}%`;
+    // Main verdict
+    verdictText.textContent = data.prediction;
+    verdictText.style.color = QUALITY_COLORS[data.prediction] || '#e6edf3';
 
-  // Update scores list
-  scoresList.innerHTML = '';
-  
-  // Sort classes by score
-  const sortedScores = Object.entries(data.all_scores)
-    .sort(([, a], [, b]) => b - a);
+    // Badge styling
+    verdictBadge.textContent = data.prediction.toUpperCase() + ' QUALITY';
+    verdictBadge.className = `verdict-badge ${data.prediction.toLowerCase()}`;
 
-  sortedScores.forEach(([className, score]) => {
-    const scoreVal = (score * 100).toFixed(1);
-    const item = document.createElement('div');
-    item.className = 'score-item';
-    item.innerHTML = `
+    // Confidence
+    const pct = (data.confidence * 100).toFixed(1);
+    confidenceVal.textContent = `${pct}%`;
+    confidenceBar.style.width = `${pct}%`;
+
+    // Timestamp
+    const now = new Date();
+    reportTimestamp.textContent = `Report generated: ${now.toLocaleString()}`;
+
+    // Score breakdown
+    scoresList.innerHTML = '';
+    const allScores = data.all_scores || {};
+
+    const sorted = Object.entries(allScores).sort((a, b) => b[1] - a[1]);
+
+    sorted.forEach(([cls, score]) => {
+        const pct = (score * 100).toFixed(1);
+        const color = QUALITY_COLORS[cls] || '#58a6ff';
+        const item = document.createElement('div');
+        item.className = 'score-item';
+        item.innerHTML = `
       <div class="score-info">
-        <span class="class-name">${className}</span>
-        <span class="score-percentage">${scoreVal}%</span>
+        <span class="score-name">${cls}</span>
+        <span class="score-val">${pct}%</span>
       </div>
       <div class="progress-bar">
-        <div class="progress-fill" style="width: 0%"></div>
+        <div class="progress-fill" style="width: ${pct}%; background: ${color};"></div>
       </div>
     `;
-    scoresList.appendChild(item);
-    
-    // Trigger animation
-    setTimeout(() => {
-      item.querySelector('.progress-fill').style.width = `${scoreVal}%`;
-    }, 100);
-  });
-
-  // Switch cards
-  uploadCard.classList.add('hidden');
-  resultContainer.classList.remove('hidden');
-}
-
-function resetUI() {
-  uploadCard.classList.remove('hidden');
-  resultContainer.classList.add('hidden');
-  fileInput.value = '';
+        scoresList.appendChild(item);
+    });
 }

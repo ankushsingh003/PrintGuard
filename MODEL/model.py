@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torchvision import models
 
-def get_model(num_classes=10):
+def get_model(num_classes=4):
     """
     Returns a ResNet-18 model modified for grayscale input and custom number of classes.
     """

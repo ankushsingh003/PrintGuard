@@ -1,81 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DocuScan AI | Advanced Document Classification</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>PrintGuard AI | Industrial Print Quality Approval System</title>
+    <meta name="description"
+        content="Industry-grade AI-powered print quality inspection and approval system for manufacturing, publishing, and packaging companies." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
-  </head>
-  <body>
-    <div id="app">
-      <nav class="navbar">
-        <div class="logo">
-          <span class="logo-icon">📄</span>
-          <span class="logo-text">DocuScan<span>AI</span></span>
-        </div>
-        <div class="nav-links">
-          <a href="#" class="active">Classifier</a>
-          <a href="#">Documentation</a>
-        </div>
-      </nav>
+</head>
 
-      <main class="container">
-        <section class="hero">
-          <h1>Intelligent Document <span>Classification</span></h1>
-          <p>Upload your scanned documents and let our AI categorize them instantly with high precision.</p>
-        </section>
-
-        <section class="classifier-section">
-          <div class="glass-card upload-card">
-            <div id="drop-zone" class="drop-zone">
-              <div class="upload-icon">📤</div>
-              <h3>Drag & Drop Document</h3>
-              <p>or click to browse files</p>
-              <span class="file-hint">Supports JPG, PNG (Max 5MB)</span>
-              <input type="file" id="file-input" accept="image/*" hidden />
-            </div>
-          </div>
-
-          <div id="result-container" class="glass-card result-card hidden">
-            <div class="result-header">
-              <h2>Classification Results</h2>
-              <button id="reset-btn" class="btn-text">Clear</button>
-            </div>
-            
-            <div class="prediction-main">
-              <div id="preview-image" class="preview-img"></div>
-              <div class="prediction-info">
-                <span class="label">Top Prediction</span>
-                <div id="top-prediction" class="category-name">---</div>
-                <div class="confidence-badge">
-                  <span id="top-confidence">0%</span> Confidence
+<body>
+    <!-- NAVBAR -->
+    <header class="header">
+        <nav class="nav container-wide">
+            <div class="nav-logo">
+                <div class="logo-mark">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect width="28" height="28" rx="8" fill="#2d6a4f" />
+                        <path d="M7 14L12 19L21 9" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
                 </div>
-              </div>
+                <span class="logo-name">Print<strong>Guard</strong> <span class="logo-ai">AI</span></span>
             </div>
-
-            <div class="analysis-breakdown">
-              <h3>Detailed Analysis</h3>
-              <div id="scores-list" class="scores-list">
-                <!-- Dynamic scores will be inserted here -->
-              </div>
+            <div class="nav-links">
+                <a href="#product">Product</a>
+                <a href="#features">Features</a>
+                <a href="#standards">Standards</a>
+                <a href="#contact">Contact</a>
             </div>
-          </div>
-        </section>
-      </main>
+            <div class="nav-actions">
+                <a href="#" class="btn-outline">Sign In</a>
+                <a href="#analyzer" class="btn-primary">Try Free</a>
+            </div>
+        </nav>
+    </header>
 
-      <div id="loader" class="loader-overlay hidden">
-        <div class="spinner"></div>
-        <p>Analyzing document structure...</p>
-      </div>
+    <!-- HERO -->
+    <section class="hero" id="product">
+        <div class="container">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                AI-Powered Quality Inspection
+            </div>
+            <h1 class="hero-title">Industrial Print Quality<br /><span class="gradient-text">Approval in Seconds</span>
+            </h1>
+            <p class="hero-subtitle">Upload any scanned print specimen and receive an instant, AI-verified quality
+                assessment report — graded to industry standards.</p>
+            <div class="hero-cta">
+                <a href="#analyzer" class="btn-hero">Analyze a Document →</a>
+                <a href="#features" class="btn-ghost">See How It Works</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-val">99.7%</span>
+                    <span class="stat-label">Uptime SLA</span>
+                </div>
+                <div class="stat-sep"></div>
+                <div class="stat-item">
+                    <span class="stat-val">4 Tiers</span>
+                    <span class="stat-label">Quality Grades</span>
+                </div>
+                <div class="stat-sep"></div>
+                <div class="stat-item">
+                    <span class="stat-val">&lt;2s</span>
+                    <span class="stat-label">Analysis Time</span>
+                </div>
+                <div class="stat-sep"></div>
+                <div class="stat-item">
+                    <span class="stat-val">ISO-Aligned</span>
+                    <span class="stat-label">Standards</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      <footer class="footer">
-        <p>&copy; 2024 DocuScan AI Core ML Project. Powered by ResNet-18.</p>
-      </footer>
+    <!-- FEATURES -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-label">Core Capabilities</div>
+            <h2 class="section-title">Enterprise-Grade<br />Quality Control</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔬</div>
+                    <h3>Pixel-Level Analysis</h3>
+                    <p>Deep neural network inspects sharpness, noise, contrast, and pixelation at a granular level.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>4-Tier Grading System</h3>
+                    <p>Excellent, Good, Fair, and Poor — each grade tied to defined thresholds for audit compliance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-Time Processing</h3>
+                    <p>Under 2-second inference time ensures high-throughput quality gates in production pipelines.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Audit-Ready Reports</h3>
+                    <p>Every analysis is logged with confidence scores suitable for ISO and regulatory submissions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN ANALYZER -->
+    <section class="analyzer-section" id="analyzer">
+        <div class="container">
+            <div class="section-label">Quality Inspection Tool</div>
+            <h2 class="section-title">Scan. Analyze. Approve.</h2>
+            <p class="section-sub">Upload a scanned document to receive an instant quality verdict from our AI engine.
+            </p>
+
+            <div class="analyzer-wrapper">
+                <!-- Upload Panel -->
+                <div class="panel upload-panel" id="upload-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span class="panel-dot green"></span>
+                            Submit Document for Inspection
+                        </div>
+                        <span class="panel-tag">ResNet-18 Model</span>
+                    </div>
+                    <div id="drop-zone" class="drop-zone">
+                        <div class="dz-inner">
+                            <div class="dz-icon-wrap">
+                                <svg class="dz-icon" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="60" height="60" rx="16" fill="#e8f5e9" />
+                                    <path d="M30 38V22M30 22L23 29M30 22L37 29" stroke="#2d6a4f" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M20 42H40" stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round" />
+                                </svg>
+                            </div>
+                            <h3 class="dz-title">Drag & Drop Print File Here</h3>
+                            <p class="dz-sub">or <span class="dz-browse">browse files</span> from your device</p>
+                            <div class="dz-formats">
+                                <span>JPG</span><span>PNG</span><span>TIFF</span><span>BMP</span>
+                            </div>
+                        </div>
+                        <input type="file" id="file-input" accept="image/*" hidden />
+                    </div>
+                    <div class="upload-footer">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <circle cx="8" cy="8" r="6" stroke="#6b7280" stroke-width="1.5" />
+                            <path d="M8 7V11" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" />
+                            <circle cx="8" cy="5.5" r="0.75" fill="#6b7280" />
+                        </svg>
+                        <span>Files are processed locally. We do not store submitted documents.</span>
+                    </div>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="panel result-panel hidden" id="result-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span class="panel-dot blue"></span>
+                            Inspection Report
+                        </div>
+                        <button id="reset-btn" class="btn-reset">New Scan</button>
+                    </div>
+
+                    <div class="verdict-section">
+                        <div id="doc-preview" class="doc-preview"></div>
+                        <div class="verdict-info">
+                            <div class="verdict-label">Quality Verdict</div>
+                            <div id="verdict-text" class="verdict-text">---</div>
+                            <div id="verdict-badge" class="verdict-badge">Analyzing...</div>
+                            <div class="score-row">
+                                <span class="score-meta">AI Confidence</span>
+                                <span id="confidence-val" class="score-pct">0%</span>
+                            </div>
+                            <div class="confidence-track">
+                                <div id="confidence-bar" class="confidence-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-section">
+                        <h4 class="breakdown-title">Quality Distribution</h4>
+                        <div id="scores-list" class="scores-list"></div>
+                    </div>
+
+                    <div class="report-footer">
+                        <span id="report-timestamp"></span>
+                        <button class="btn-outline-sm" onclick="window.print()">Print Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STANDARDS -->
+    <section class="standards" id="standards">
+        <div class="container">
+            <div class="standards-inner">
+                <div class="standards-text">
+                    <div class="section-label">Quality Scale</div>
+                    <h2>Four-Tier Grading<br />Framework</h2>
+                    <p>PrintGuard AI grades every document scan against a strict four-tier rubric based on blur, noise,
+                        contrast, and pixelation metrics — mapped to ISO 12647 print quality standards.</p>
+                </div>
+                <div class="standards-grid">
+                    <div class="grade-card excellent">
+                        <div class="grade-pill">Excellent</div>
+                        <p>Sharp, high contrast, zero noise. Production-ready for all formats.</p>
+                    </div>
+                    <div class="grade-card good">
+                        <div class="grade-pill">Good</div>
+                        <p>Minor scan noise or slight blur. Accepted for most commercial print.</p>
+                    </div>
+                    <div class="grade-card fair">
+                        <div class="grade-pill">Fair</div>
+                        <p>Noticeable artifacts, reduced clarity. Review recommended.</p>
+                    </div>
+                    <div class="grade-card poor">
+                        <div class="grade-pill">Poor</div>
+                        <p>Severe degradation. Fails quality gate. Rescan required.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contact">
+        <div class="container-wide footer-inner">
+            <div class="footer-brand">
+                <div class="nav-logo">
+                    <div class="logo-mark">
+                        <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+                            <rect width="28" height="28" rx="8" fill="#2d6a4f" />
+                            <path d="M7 14L12 19L21 9" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <span class="logo-name">Print<strong>Guard</strong> <span class="logo-ai">AI</span></span>
+                </div>
+                <p>Trusted print quality assurance for modern manufacturing pipelines.</p>
+            </div>
+            <div class="footer-links">
+                <span>Product</span><span>API Docs</span><span>Pricing</span><span>Privacy</span>
+            </div>
+            <div class="footer-copy">© 2026 PrintGuard AI. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- LOADER -->
+    <div id="loader" class="loader-overlay hidden">
+        <div class="loader-box">
+            <div class="loader-ring"></div>
+            <p>Analyzing print quality...</p>
+            <span>Powered by Deep Learning</span>
+        </div>
     </div>
+
     <script type="module" src="./main.js"></script>
-  </body>
+</body>
+
 </html>
