@@ -1,0 +1,26 @@
+# Data & Datasets
+dataset/
+*.jpg
+*.png
+*.jpeg
+
+# Models & Weights
+*.pth
+*.pt
+TRAINING/best_model.pth
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Frontend / Node
+WEB_APP/node_modules/
+WEB_APP/dist/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DocuScan AI | Advanced Document Classification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <nav class="navbar">
+        <div class="logo">
+          <span class="logo-icon">📄</span>
+          <span class="logo-text">DocuScan<span>AI</span></span>
+        </div>
+        <div class="nav-links">
+          <a href="#" class="active">Classifier</a>
+          <a href="#">Documentation</a>
+        </div>
+      </nav>
+
+      <main class="container">
+        <section class="hero">
+          <h1>Intelligent Document <span>Classification</span></h1>
+          <p>Upload your scanned documents and let our AI categorize them instantly with high precision.</p>
+        </section>
+
+        <section class="classifier-section">
+          <div class="glass-card upload-card">
+            <div id="drop-zone" class="drop-zone">
+              <div class="upload-icon">📤</div>
+              <h3>Drag & Drop Document</h3>
+              <p>or click to browse files</p>
+              <span class="file-hint">Supports JPG, PNG (Max 5MB)</span>
+              <input type="file" id="file-input" accept="image/*" hidden />
+            </div>
+          </div>
+
+          <div id="result-container" class="glass-card result-card hidden">
+            <div class="result-header">
+              <h2>Classification Results</h2>
+              <button id="reset-btn" class="btn-text">Clear</button>
+            </div>
+            
+            <div class="prediction-main">
+              <div id="preview-image" class="preview-img"></div>
+              <div class="prediction-info">
+                <span class="label">Top Prediction</span>
+                <div id="top-prediction" class="category-name">---</div>
+                <div class="confidence-badge">
+                  <span id="top-confidence">0%</span> Confidence
+                </div>
+              </div>
+            </div>
+
+            <div class="analysis-breakdown">
+              <h3>Detailed Analysis</h3>
+              <div id="scores-list" class="scores-list">
+                <!-- Dynamic scores will be inserted here -->
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div id="loader" class="loader-overlay hidden">
+        <div class="spinner"></div>
+        <p>Analyzing document structure...</p>
+      </div>
+
+      <footer class="footer">
+        <p>&copy; 2024 DocuScan AI Core ML Project. Powered by ResNet-18.</p>
+      </footer>
+    </div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
