@@ -6,29 +6,25 @@ import io
 import os
 import sys
 
-# Add parent directory to path to allow imports from sibling folders
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from MODEL.model import get_model
 from DATA_PREPROCESSING.preprocessing import get_val_transforms
 
-app = FastAPI(title="Document Image Classifier API")
+app = FastAPI(title="PrintGuard AI - Quality Detection API")
 
-# Enable CORS for frontend communication
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, replace with specific origins
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Global variables for model and classes
 MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'TRAINING', 'best_model.pth')
 CLASSES = ['Excellent', 'Good', 'Fair', 'Poor']
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Load model lazily
 model = None
 
 def load_model():
@@ -45,7 +41,7 @@ def load_model():
 
 @app.get("/")
 async def root():
-    return {"message": "Document Image Classifier API is running"}
+    return {"message": "PrintGuard AI Quality Detection API is running"}
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
@@ -53,14 +49,12 @@ async def predict(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="File provided is not an image.")
 
     try:
-        # Load and preprocess image
         contents = await file.read()
         image = Image.open(io.BytesIO(contents)).convert('RGB')
-        
+
         transform = get_val_transforms()
         image_tensor = transform(image).unsqueeze(0).to(DEVICE)
 
-        # Inference
         loaded_model = load_model()
         with torch.no_grad():
             outputs = loaded_model(image_tensor)
